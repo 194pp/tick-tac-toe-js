@@ -13,6 +13,7 @@ function createGame(goesFirst) {
     ghostFill();
     gameActive = true;
     hideQuestionBox();
+    if (!goesFirst) botMove();
 }
 
 function createCell(index) {
@@ -104,13 +105,21 @@ function hideQuestionBox() {
 
 function makeMove() {
     debugCell(this);
-    playGrid[this.id[0]] = 1;
     if (isGhost(this)) {
         console.log("isghost");
         replaceGhost(this);
     }
+    else { 
+        console.log("ERROR");
+        return;
+    }
+    playGrid[this.id[0]] = 1;
     console.log(winCheck(1));
     turnCounter++;
+    if (turnCounter > 8) {
+        gameActive = false;
+        // Draw
+    }
 }
 
 function debugCell(cell) {
@@ -143,4 +152,25 @@ function winCheck(num) {
         playGrid[4] == num &&
         playGrid[6] == num) return true;
     else return false;
+}
+
+// Bot AI ahead
+
+function botMove() {
+    if (playerIsCircle && turnCounter == 0) {       // First optimal move if bot goes first
+        let corners = [0, 2, 6, 8];
+        let cornerPick = Math.floor(Math.random() * 4);
+        console.log("corner pick: " + cornerPick);
+        console.log("corner: " + corners[cornerPick]);
+        playGrid[corners[cornerPick]] = 2;
+        appendSvgBot(corners[cornerPick]);
+    }
+}
+
+function appendSvgBot(cellNumber) {
+    let cellID = cellNumber + "cell";
+    let cell = document.getElementById(cellID);
+    const svg = createSvg(!playerIsCircle);
+    cell.textContent = '';
+    cell.appendChild(svg);
 }
