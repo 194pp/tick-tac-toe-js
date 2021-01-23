@@ -1,8 +1,9 @@
 let gameActive = false;
+let turnCounter = 0;
 let playerIsCircle;
-let playGrid = [[0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0]];
+let playGrid = [0, 0, 0,    //  0's still ghosts,
+                0, 0, 0,    //  1's for player,
+                0, 0, 0];   //  2's for bot.
 
 flexboxFillByCells();
 
@@ -16,7 +17,7 @@ function createGame(goesFirst) {
 
 function createCell(index) {
     let gameCell = document.createElement("div");
-    gameCell.onclick = debugCell;
+    gameCell.onclick = makeMove;
     gameCell.className = "cell";
     gameCell.id = index + "cell";
     let ghostableDiv = document.createElement("div");
@@ -79,7 +80,7 @@ function clearCells() {
     cells.forEach(element => element.textContent = "");
 }
 
-function assignghostHover() {
+function assignGhostHover() { // maybe omit??
     let cells = allCells();
     cells.forEach(element => element.className = element.className + " ghost")
 }
@@ -101,17 +102,45 @@ function hideQuestionBox() {
     box2.style = "display: inherit";
 }
 
-function makeMove(cell) {
-    if (isEmpty(cell)) {
-        overwriteCell(playerIsCircle);
-        botMove();
+function makeMove() {
+    debugCell(this);
+    playGrid[this.id[0]] = 1;
+    if (isGhost(this)) {
+        console.log("isghost");
+        replaceGhost(this);
     }
+    console.log(winCheck(1));
+    turnCounter++;
 }
 
-function debugCell() {
-    console.log(this.id);
+function debugCell(cell) {
+    console.log(cell.id);
 }
 
-function isEmpty(cell) {
-    let gho = 
+function isGhost(cell) {
+    return cell.firstElementChild.className == 'ghost';
+}
+
+function replaceGhost(cell) {
+    cell.firstElementChild.className = "";
+}
+
+function winCheck(num) {
+    for (let i = 0; i < 9; i = i+3) {   // Horizontal check
+        if (playGrid[i] == num &&
+            playGrid[i+1] == num &&
+            playGrid[i+2] == num) return true;
+    }
+    for (let i = 0; i < 3; i++) {       // Vertical check
+        if (playGrid[i] == num &&
+            playGrid[i+3] == num &&
+            playGrid[i+6] == num) return true;
+    }
+    if (playGrid[0] == num &&           // Diagonal down-right check
+        playGrid[4] == num &&
+        playGrid[8] == num) return true;
+    else if (playGrid[2] == num &&      // Diagonal down-left check
+        playGrid[4] == num &&
+        playGrid[6] == num) return true;
+    else return false;
 }
