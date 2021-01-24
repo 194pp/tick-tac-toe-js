@@ -1,0 +1,50 @@
+.outside-frame {
+    margin: 50px auto;
+    text-align: center;
+    width: 240px;
+}
+
+.inside-frame-question {
+    margin: 5px;
+}
+
+.inside-frame-game {
+    margin: 5px;
+    margin-right: 5px;
+    text-align: center;
+    height: 228px;
+}
+
+.button-fit {
+    margin-bottom: 5px;
+}
+
+.cell-flexbox {
+    margin: 5;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cell {
+    border: 1px solid black;
+    width: 72px;
+    height: 72px;
+}
+
+.cell:hover .ghost{
+    display: inherit;
+    opacity: 50%;
+}
+
+.ghost {
+    display: none;
+}
+
+svg {
+    margin: 5px auto;
+}
+
+#good-luck {
+    display: none;
+    height: 70px;
+}
